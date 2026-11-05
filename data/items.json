@@ -206,10 +206,10 @@
 {
 "id": "L0025",
 "child": "vocal prosody",
-"parent": "N:speech function measure",
+"parent": "speech function measures",
 "child_kind": "bottom node",
 "child_context": "Registered description (one trial, NCT03689621): Two voice recordings of the participant talking will be collected on each of these occasions. Each recording will be at least 20 seconds long, with the participant asked to talk about a positive experience (e.g. favourite birthday, best friend etc.) in one, a less positive time (e.g. a time when he…. Conditions: Transcutaneous Vagal Nerve Stimulation (tVNS); Prader-Willi Syndrome.",
-"parent_gloss": null,
+"parent_gloss": "Outcome measures assessing speech production and its acoustic, articulatory, fluency or intelligibility characteristics.",
 "child_gloss": null
 },
 {
@@ -323,10 +323,10 @@
 {
 "id": "L0153",
 "child": "birth trauma",
-"parent": "N:obstetric outcome",
+"parent": "obstetric outcomes",
 "child_kind": "bottom node",
 "child_context": "Registered description (one trial, NCT01273584): Shoulder dystocia, brachial plexus injury. Conditions: Pregnancy Complications; Obesity.",
-"parent_gloss": null,
+"parent_gloss": "Outcome measures assessing maternal, fetal or neonatal events and complications associated with pregnancy, labour or delivery.",
 "child_gloss": null
 },
 {
@@ -1232,10 +1232,10 @@
 {
 "id": "L0078",
 "child": "home food environment",
-"parent": "N:food environment measure",
+"parent": "food environment measures",
 "child_kind": "bottom node",
 "child_context": "Registered description (one trial, NCT01746394): Measured using home food inventory; based on direct observation of foods in household (i.e. in refrigerator, freezer, pantry, cupboards, or other areas food is stored). Conditions: Obesity.",
-"parent_gloss": null,
+"parent_gloss": "Outcome measures assessing the availability, accessibility, affordability or characteristics of food in home, community or institutional environments.",
 "child_gloss": null
 },
 {
@@ -1385,10 +1385,10 @@
 {
 "id": "L0135",
 "child": "anesthesia measures",
-"parent": "N:surgical measure",
+"parent": "surgical measures",
 "child_kind": "category",
 "child_context": null,
-"parent_gloss": null,
+"parent_gloss": "Outcome measures assessing surgical procedures, anaesthetic care or perioperative events and complications.",
 "child_gloss": "Outcome measures assessing the depth, adequacy, duration, or requirements of anesthesia or anesthetic blockade."
 },
 {
@@ -1709,10 +1709,10 @@
 {
 "id": "L0037",
 "child": "number of subjects found to have fatty liver disease among non-obese subjects without obstructive sleep apnea",
-"parent": "N:liver measure",
+"parent": "liver measures",
 "child_kind": "bottom node",
 "child_context": "Registered conditions: Sleep Apnea, Obstructive; Fatty Liver.",
-"parent_gloss": null,
+"parent_gloss": "Outcome measures assessing liver structure, function, injury or disease.",
 "child_gloss": null
 },
 {
@@ -1911,7 +1911,7 @@
 "child_kind": "category",
 "child_context": null,
 "parent_gloss": "Outcome measures used to evaluate an intervention without specifying the particular attribute or outcome domain being assessed.",
-"child_gloss": null
+"child_gloss": "Includes technical execution, difficulty, specimen adequacy and immediate success of clinical procedures; excludes adverse events caused by procedures, which belong to procedural complications."
 },
 {
 "id": "L0082",
@@ -2681,10 +2681,10 @@
 {
 "id": "L0157",
 "child": "participation in summer activities",
-"parent": "N:participation measure",
+"parent": "participation measures",
 "child_kind": "bottom node",
 "child_context": "Registered description (one trial, NCT04085965): Number of days children attended camp, summer school, or day care over the summer. Conditions: Childhood Obesity Prevention.",
-"parent_gloss": null,
+"parent_gloss": "Outcome measures assessing involvement in social, recreational, educational, occupational or community activities.",
 "child_gloss": null
 },
 {
