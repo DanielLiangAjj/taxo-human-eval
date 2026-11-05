@@ -1,8 +1,12 @@
 #!/usr/bin/env python3
 """Pull the human-evaluation answers from Supabase into the scoring sheets (standard library only).
 
-Reads the two tables through the Supabase REST endpoint with the service-role key, which is read from
---service-key-file at run time and never printed or written anywhere.
+Reads the two tables either through the Supabase REST endpoint with the service-role key (read from
+--service-key-file at run time, never printed or written anywhere), or, with no key at all, from the two CSV
+files the Supabase table editor exports (Table Editor > evaluators > Export to CSV, same for ratings):
+
+  python3 scripts/pull_ratings.py --evaluators-csv results/evaluators_rows.csv --ratings-csv results/ratings_rows.csv \
+      --kit <kit dir> --out results/2026-11-20      (add --progress to only print counts)
 
   # who has done what so far
   python3 scripts/pull_ratings.py --url https://<ref>.supabase.co --service-key-file ~/.taxo_service_key --progress
@@ -33,6 +37,13 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 DEFAULT_ITEMS = os.path.normpath(os.path.join(HERE, '..', 'data', 'items.json'))
 SHEETS = ('links', 'pairs', 'groups', 'coverage')
 PAGE = 1000
+
+
+def read_csv_export(path):
+    """Rows of a Supabase table-editor CSV export as dicts; empty cells and 'null' become None."""
+    with open(path, encoding='utf-8-sig', newline='') as f:
+        rows = list(csv.DictReader(f))
+    return [{k: (None if v in ('', 'null', 'NULL') else v) for k, v in r.items()} for r in rows]
 
 
 def fail(message):
@@ -253,8 +264,10 @@ def print_progress(summary):
 
 def main():
     ap = argparse.ArgumentParser(description='Pull ratings from Supabase into the scoring sheets.')
-    ap.add_argument('--url', required=True, help='Supabase project URL, https://<ref>.supabase.co')
-    ap.add_argument('--service-key-file', required=True, help='file holding the service-role key (read, never printed)')
+    ap.add_argument('--url', help='Supabase project URL, https://<ref>.supabase.co')
+    ap.add_argument('--service-key-file', help='file holding the service-role key (read, never printed)')
+    ap.add_argument('--evaluators-csv', help='CSV export of the evaluators table from the Supabase table editor (no key needed)')
+    ap.add_argument('--ratings-csv', help='CSV export of the ratings table from the Supabase table editor')
     ap.add_argument('--kit', help='folder of the blank pooled sheets (pooled/rater1_*.tsv)')
     ap.add_argument('--out', help='output folder, for example results/2026-11-20')
     ap.add_argument('--map', action='append', default=[], metavar='CODE=K', help='rater number for a code (repeatable)')
@@ -265,9 +278,27 @@ def main():
         ap.error('--kit and --out are required unless --progress is given')
 
     items = load_items(a.items)
-    rest = Rest(a.url, read_key(a.service_key_file))
-    evaluators = rest.table('evaluators', 'created_at.asc')
-    ratings = rest.table('ratings', 'id.asc')
+    if a.evaluators_csv or a.ratings_csv:
+        if not (a.evaluators_csv and a.ratings_csv):
+            ap.error('give both --evaluators-csv and --ratings-csv')
+        evaluators = read_csv_export(a.evaluators_csv)
+        ratings = read_csv_export(a.ratings_csv)
+        for r in ratings:
+            if isinstance(r.get('answer'), str):
+                r['answer'] = json.loads(r['answer'])
+            elif not r.get('answer'):
+                r['answer'] = {}
+            for k in ('id', 'elapsed_ms'):
+                if r.get(k) not in (None, ''):
+                    r[k] = int(float(r[k]))
+        evaluators.sort(key=lambda e: (e.get('created_at') or '', e['code']))
+        ratings.sort(key=lambda r: r.get('id') or 0)
+    else:
+        if not (a.url and a.service_key_file):
+            ap.error('give --url and --service-key-file, or the two CSV exports')
+        rest = Rest(a.url, read_key(a.service_key_file))
+        evaluators = rest.table('evaluators', 'created_at.asc')
+        ratings = rest.table('ratings', 'id.asc')
     raters = assign_raters(evaluators, a.map)
     summary = summarise(evaluators, ratings, raters, items)
     if a.progress:
