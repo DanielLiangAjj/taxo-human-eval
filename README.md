@@ -8,7 +8,7 @@ resume on any device with the code. Answers are saved on every Next to a Supabas
 into the scoring sheets with `scripts/pull_ratings.py`. The site never shows which taxonomy an item
 came from.
 
-Live: <https://danielliangajj.github.io/taxo-human-eval/>. See `SPEC.md` for the design.
+Live: <https://danielliangajj.github.io/taxo-human-eval/>.
 
 ## Run it locally
 
@@ -77,7 +77,7 @@ the copy with the later `client_ts` wins, both on the server and when merging on
 `{"rating": "not covered", "candidate": null, "note": "unclear", "unclear": true}`.
 
 `data/items.json` holds the items (built by `scripts/export_items.py` from the blind kit; do not edit
-it by hand). Its shape is described in `SPEC.md`, section 2.
+it by hand). Its shape is the one `scripts/export_items.py` writes: one object per sheet with its items.
 
 ## Files
 
