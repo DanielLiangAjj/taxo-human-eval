@@ -143,6 +143,10 @@ kbd { font-family: var(--mono); font-size: 13px; line-height: 1; padding: 3px 6p
 .viz { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 10px; margin-bottom: 14px; }
 .viz svg { display: block; width: 100%; height: auto; max-width: 800px; margin: 0 auto; overflow: hidden; }
 .question { font-size: 19px; margin: 4px 0 12px; }
+.glosses { margin: 2px 0 10px; color: var(--muted); font-size: 15px; line-height: 1.45; }
+.glosses p { margin: 3px 0; }
+.gloss-role { font-weight: 600; color: var(--ink); }
+.gloss-name { font-style: italic; }
 .controls { display: flex; flex-direction: column; gap: 4px; }
 .controls .choices { margin-bottom: 4px; }
 .row-line { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; margin: 6px 0; }

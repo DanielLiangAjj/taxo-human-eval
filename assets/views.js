@@ -427,13 +427,14 @@ function buildItemScreen(s) {
   const sheet = session.sheets[s];
   const ui = SHEET_UI[sheet.id];
   const vizHost = h('div', { class: `viz viz-host-${sheet.id}` });
+  const glossHost = h('div', { class: 'glosses', hidden: true });
   const question = h('h2', { class: 'question', tabindex: '-1' }, ui.question);
   const controlsHost = h('div', { class: 'controls-host' });
   const back = h('button', { type: 'button', class: 'btn', onclick: goBack }, 'Back');
   const next = h('button', { type: 'button', class: 'btn btn-primary', onclick: goNext }, 'Next');
   const hint = h('span', { class: 'nav-hint' });
   const root = h('section', { class: `item-screen sheet-${sheet.id}` },
-    vizHost, question, controlsHost,
+    vizHost, glossHost, question, controlsHost,
     h('div', { class: 'nav' }, back, hint, next),
     h('div', { class: 'below' },
       h('p', { class: 'keys' }, ui.keys),
@@ -444,7 +445,7 @@ function buildItemScreen(s) {
   $('main').replaceChildren(root);
   const st = {
     s, i: -1, sheet, it: null, draft: null, stash: null, ctrl: null, watch: null,
-    root, vizHost, question, controlsHost, back, next, hint,
+    root, vizHost, glossHost, question, controlsHost, back, next, hint,
     changed: () => refreshItem(),
   };
   st.viz = VIZ[sheet.id](vizHost, sheet, {
@@ -477,6 +478,7 @@ function showItem(s, i, dir = 0) {
   st.draft = rec ? ui.fromAnswer(rec.answer) : ui.empty();
   st.watch = stopwatch();
   st.viz.show(it, st.draft, dir);
+  renderGlosses(st, sheet.id, it);
   st.ctrl = buildControls(sheet, it, st);
   st.controlsHost.replaceChildren(st.ctrl.el);
   refreshItem();
@@ -489,6 +491,16 @@ function showItem(s, i, dir = 0) {
   const headerBottom = header.hidden ? 0 : header.getBoundingClientRect().bottom;
   const vizTop = st.vizHost.getBoundingClientRect().top;
   if (vizTop < headerBottom) window.scrollTo(0, Math.max(0, window.scrollY + vizTop - headerBottom - 12));
+}
+
+/** Category definitions beside the picture: the parent (and a category child) of a link, the category of a group. */
+function renderGlosses(st, sheetId, it) {
+  const rows = sheetId === 'links' ? [['Parent category', it.parent, it.parent_gloss], ['Child category', it.child, it.child_gloss]]
+    : sheetId === 'groups' ? [['Category', it.category, it.category_gloss]] : [];
+  const shown = rows.filter((r) => r[2]);
+  st.glossHost.replaceChildren(...shown.map(([role, name, text]) => h('p', { class: 'gloss' },
+    h('span', { class: 'gloss-role' }, `${role}, `), h('span', { class: 'gloss-name' }, name), `: ${text}`)));
+  st.glossHost.hidden = shown.length === 0;
 }
 
 function refreshItem() {
